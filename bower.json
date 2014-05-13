@@ -1,3 +1,7 @@
 {
-  "name": "scribe-plugin-curly-quotes"
+  "name": "scribe-plugin-curly-quotes",
+  "devDependencies": {
+    "requirejs": "~2.1.9",
+    "scribe": "~0.1.10"
+  }
 }
