@@ -12,12 +12,11 @@ Alternatively, you can [access the distribution files through GitHub releases](h
 scribe-plugin-curly-quotes is an AMD module:
 
 ``` js
-require(['scribe', 'scribe-plugin-curly-quotes'], function (Scribe, scribePluginToolbar) {
+require(['scribe', 'scribe-plugin-curly-quotes'], function (Scribe, scribePluginCurlyQuotes) {
   var scribeElement = document.querySelector('.scribe');
   // Create an instance of Scribe
   var scribe = new Scribe(scribeElement);
 
-  var toolbarElement = document.querySelector('.toolbar');
-  scribe.use(scribePluginToolbar(toolbarElement));
+  scribe.use(scribePluginCurlyQuotes());
 });
 ```
