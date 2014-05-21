@@ -1,5 +1,7 @@
 {
   "name": "scribe-plugin-curly-quotes",
+  "version": "0.1.2",
+  "main": "src/scribe-plugin-curly-quotes.js",
   "devDependencies": {
     "chai": "~1.9.1",
     "http-server": "~0.6.1",
@@ -15,5 +17,9 @@
   },
   "scripts": {
     "test": "./run-tests.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/guardian/scribe-plugin-curly-quotes.git"
   }
 }
