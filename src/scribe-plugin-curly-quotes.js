@@ -45,6 +45,7 @@ define(['lodash-amd/modern/arrays/flatten'], function (flatten) {
       function input(event) {
         var selection = new scribe.api.Selection();
         // TODO: What about inside inline elements? Edge case?
+        // TODO: Will this always be a text node?
         var selectedNode = selection.selection.anchorNode;
         var caretOffset = selection.selection.anchorOffset;
         var textFromStartOfLine = flatten([
