@@ -50,10 +50,10 @@ define(['lodash-amd/modern/arrays/flatten'], function (flatten) {
           prevAll(selectedNode).map(function (node) {
             return node.textContent;
           }),
-          selectedNode.textContent.slice(0, selection.selection.baseOffset)
+          selectedNode.textContent.slice(0, selection.selection.focusOffset)
         ]).join('');
         var textToEndOfLine = flatten([
-          selectedNode.textContent.slice(selection.selection.baseOffset),
+          selectedNode.textContent.slice(selection.selection.focusOffset),
           nextAll(selectedNode).map(function (node) {
             return node.textContent;
           })
