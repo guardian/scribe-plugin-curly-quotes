@@ -1,6 +1,24 @@
-define(function () {
+define(['lodash-amd/modern/arrays/flatten'], function (flatten) {
 
   'use strict';
+
+  // TODO: scribe-common
+  function prevAll(el) {
+      var all = [];
+      while ((el = el.previousSibling)) {
+          all.push(el);
+      }
+      return all.reverse();
+  }
+
+  // TODO: scribe-common
+  function nextAll(el) {
+      var all = [];
+      while ((el = el.nextSibling)) {
+          all.push(el);
+      }
+      return all;
+  }
 
   return function () {
 
@@ -25,33 +43,53 @@ define(function () {
       scribe.registerHTMLFormatter('normalize', substituteCurlyQuotes);
 
       function input(event) {
-        var curlyChar;
+        var selection = new scribe.api.Selection();
+        // TODO: What about inside inline elements? Edge case?
+        var textFromStartOfLine = flatten([
+          prevAll(selection.selection.baseNode).map(function (node) {
+            return node.textContent;
+          }),
+          selection.selection.baseNode.textContent.slice(0, selection.selection.baseOffset)
+        ]).join('');
+        var textToEndOfLine = flatten([
+          selection.selection.baseNode.textContent.slice(selection.selection.baseOffset),
+          nextAll(selection.selection.baseNode).map(function (node) {
+            return node.textContent;
+          })
+        ]).join('');
 
-        // If previous char is real content, close quote; else, open
-        // TODO: annoying Chrome/Firefox
-        var currentChar = keys[event.charCode];
-        if (currentChar === '"') {
-          if (wordBeforeSelectedRange()) {
-            curlyChar = closeDoubleCurly;
-          } else {
-            curlyChar = openDoubleCurly;
+        // Only substitute if we're not inside text that looks like HTML
+        // (`<*>`)
+        var looksLikeHtml = /<[^>]*$/.test(textFromStartOfLine) && /^[^<]*>/.test(textToEndOfLine);
+        if (! looksLikeHtml) {
+          var curlyChar;
+
+          // If previous char is real content, close quote; else, open
+          // TODO: annoying Chrome/Firefox
+          var currentChar = keys[event.charCode];
+          if (currentChar === '"') {
+            if (wordBeforeSelectedRange()) {
+              curlyChar = closeDoubleCurly;
+            } else {
+              curlyChar = openDoubleCurly;
+            }
+          } else if (currentChar === '\'') {
+            if (wordBeforeSelectedRange()) {
+              curlyChar = closeSingleCurly;
+            } else {
+              curlyChar = openSingleCurly;
+            }
           }
-        } else if (currentChar === '\'') {
-          if (wordBeforeSelectedRange()) {
-            curlyChar = closeSingleCurly;
-          } else {
-            curlyChar = openSingleCurly;
+
+          // Substitute entered char with curly replacement
+          if (curlyChar) {
+            event.preventDefault();
+
+            scribe.transactionManager.run(function() {
+              var quoteText = replaceSelectedRangeWith(curlyChar);
+              placeCaretAfter(quoteText);
+            });
           }
-        }
-
-        // Substitute entered char with curly replacement
-        if (curlyChar) {
-          event.preventDefault();
-
-          scribe.transactionManager.run(function() {
-            var quoteText = replaceSelectedRangeWith(curlyChar);
-            placeCaretAfter(quoteText);
-          });
         }
       }
 
