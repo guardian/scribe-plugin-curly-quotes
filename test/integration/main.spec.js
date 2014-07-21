@@ -179,7 +179,7 @@ describe('curly quotes plugin', function () {
     when('inserting single quotes around a word', function () {
       beforeEach(function () {
         return driver.executeScript(function () {
-          window.scribe.insertHTML("<p>Hello 'world'!</p>");
+          window.scribe.insertHTML('<p>Hello \'world\'!</p>');
         });
       });
 
@@ -193,7 +193,7 @@ describe('curly quotes plugin', function () {
     when('inserting single quotes after punctuation', function () {
       beforeEach(function () {
         return driver.executeScript(function () {
-          window.scribe.insertHTML("<p>'Hello world!'</p>");
+          window.scribe.insertHTML('<p>\'Hello world!\'</p>');
         });
       });
 
@@ -208,7 +208,7 @@ describe('curly quotes plugin', function () {
       beforeEach(function () {
         return driver.executeScript(function () {
           // Misplaced inline elements wrt whitespace, but can happen
-          window.scribe.insertHTML("<p>'<em>Hello world!</em>' <strong>And </strong>'other'<strong> example</strong></p>");
+          window.scribe.insertHTML('<p>\'<em>Hello world!</em>\' <strong>And </strong>\'other\'<strong> example</strong></p>');
         });
       });
 
@@ -222,13 +222,13 @@ describe('curly quotes plugin', function () {
     when('inserting single quotes between elements and newlines', function () {
       beforeEach(function () {
         return driver.executeScript(function () {
-          window.scribe.insertHTML("<p>1\n'<em>2</em>'\n3</p>");
+          window.scribe.insertHTML('<p>1\n\'<em>2</em>\'\n3</p>');
         });
       });
 
       it('should replace with curly single quotes instead', function () {
         return scribeNode.getInnerHTML().then(function (innerHTML) {
-          expect(innerHTML).to.equal("<p>1\n‘<em>2</em>’\n3</p>");
+          expect(innerHTML).to.equal('<p>1\n‘<em>2</em>’\n3</p>');
         });
       });
     });
@@ -237,7 +237,7 @@ describe('curly quotes plugin', function () {
       beforeEach(function () {
         return driver.executeScript(function () {
           // Misplaced inline elements wrt whitespace, but can happen
-          window.scribe.insertHTML("<p>'<em>Hello world!</em>'</p>");
+          window.scribe.insertHTML('<p>\'<em>Hello world!</em>\'</p>');
         });
       });
 
@@ -254,7 +254,7 @@ describe('curly quotes plugin', function () {
     when('inserting content with single quoted attributes', function () {
       beforeEach(function () {
         return driver.executeScript(function () {
-          window.scribe.insertHTML("<p><em class='foo'>Just text</em></p>");
+          window.scribe.insertHTML('<p><em class=\'foo\'>Just text</em></p>');
         });
       });
 
@@ -269,13 +269,13 @@ describe('curly quotes plugin', function () {
     when('inserting escaped HTML with single quoted attributes', function () {
       beforeEach(function () {
         return driver.executeScript(function () {
-          window.scribe.insertHTML("<p>&lt;p class='foo'&gt;1&lt;/p&gt;</p>");
+          window.scribe.insertHTML('<p>&lt;p class=\'foo\'&gt;1&lt;/p&gt;</p>');
         });
       });
 
       it('should not convert them to curly quotes', function () {
         return scribeNode.getInnerHTML().then(function (innerHTML) {
-          expect(innerHTML).to.equal("<p>&lt;p class='foo'&gt;1&lt;/p&gt;</p>");
+          expect(innerHTML).to.equal('<p>&lt;p class=\'foo\'&gt;1&lt;/p&gt;</p>');
         });
       });
     });
