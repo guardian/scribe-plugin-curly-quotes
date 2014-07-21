@@ -393,7 +393,7 @@ describe('curly quotes plugin', function () {
         return scribeNode.sendKeys('\'');
       });
 
-      it('should not insert a curly single quote instead', function () {
+      it('should not convert to a curly single quote', function () {
         return scribeNode.getInnerHTML().then(function (innerHTML) {
           expect(innerHTML).to.have.html('<p>&lt;\'&gt;</p>');
         });
@@ -407,7 +407,7 @@ describe('curly quotes plugin', function () {
         return scribeNode.sendKeys('"');
       });
 
-      it('should not insert a curly double quote instead', function () {
+      it('should not convert to a curly double quote', function () {
         return scribeNode.getInnerHTML().then(function (innerHTML) {
           expect(innerHTML).to.have.html('<p>&lt;"&gt;</p>');
         });
@@ -421,7 +421,7 @@ describe('curly quotes plugin', function () {
         return scribeNode.sendKeys(' bar=\'baz\'');
       });
 
-      it('should not insert curly single quotes instead', function () {
+      it('should not convert to curly single quotes', function () {
         return scribeNode.getInnerHTML().then(function (innerHTML) {
           expect(innerHTML).to.have.html('<p>&lt;foo bar=\'baz\'&gt;</p>');
         });
