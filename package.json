@@ -13,7 +13,7 @@
     "plumber-uglifyjs": "~0.3.0",
     "plumber-write": "~0.3.0",
     "selenium-webdriver": "~2.41.0",
-    "scribe-test-harness": "~0.0.1"
+    "scribe-test-harness": "~0.0.6"
   },
   "scripts": {
     "test": "./run-tests.sh"
