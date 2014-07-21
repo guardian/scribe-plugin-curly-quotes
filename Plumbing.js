@@ -20,7 +20,13 @@ module.exports = function (pipelines) {
 
   pipelines['build'] = [
     glob('src/scribe-plugin-curly-quotes.js'),
-    requireJS(),
+    requireJS({
+      // FIXME: auto?
+      preserveLicenseComments: false,
+      paths: {
+        'lodash-amd': '../bower_components/lodash-amd',
+      }
+    }),
     writeBoth
   ];
 };
