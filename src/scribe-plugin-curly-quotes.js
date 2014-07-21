@@ -43,28 +43,9 @@ define(['lodash-amd/modern/arrays/flatten'], function (flatten) {
       scribe.registerHTMLFormatter('normalize', substituteCurlyQuotes);
 
       function input(event) {
-        var selection = new scribe.api.Selection();
-        // TODO: What about inside inline elements? Edge case?
-        // TODO: Will this always be a text node?
-        var selectedNode = selection.selection.anchorNode;
-        var caretOffset = selection.selection.anchorOffset;
-        var textFromStartOfLine = flatten([
-          prevAll(selectedNode).map(function (node) {
-            return node.textContent;
-          }),
-          selectedNode.textContent.slice(0, caretOffset)
-        ]).join('');
-        var textToEndOfLine = flatten([
-          selectedNode.textContent.slice(caretOffset),
-          nextAll(selectedNode).map(function (node) {
-            return node.textContent;
-          })
-        ]).join('');
-
         // Only substitute if we're not inside text that looks like HTML
         // (`<*>`)
-        var insideHtmlTag = /<[^>]*$/.test(textFromStartOfLine) && /^[^<]*>/.test(textToEndOfLine);
-        if (! insideHtmlTag) {
+        if (! isCaretInsideHtmlTag()) {
           var curlyChar;
 
           // If previous char is real content, close quote; else, open
@@ -94,6 +75,28 @@ define(['lodash-amd/modern/arrays/flatten'], function (flatten) {
             });
           }
         }
+      }
+
+      function isCaretInsideHtmlTag() {
+        var selection = new scribe.api.Selection();
+        // TODO: What about inside inline elements? Edge case?
+        // TODO: Will this always be a text node?
+        var selectedNode = selection.selection.anchorNode;
+        var caretOffset = selection.selection.anchorOffset;
+        var textFromStartOfLine = flatten([
+          prevAll(selectedNode).map(function (node) {
+            return node.textContent;
+          }),
+          selectedNode.textContent.slice(0, caretOffset)
+        ]).join('');
+        var textToEndOfLine = flatten([
+          selectedNode.textContent.slice(caretOffset),
+          nextAll(selectedNode).map(function (node) {
+            return node.textContent;
+          })
+        ]).join('');
+
+        return /<[^>]*$/.test(textFromStartOfLine) && /^[^<]*>/.test(textToEndOfLine);
       }
 
       function wordBeforeSelectedRange() {
