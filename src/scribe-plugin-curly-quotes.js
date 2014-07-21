@@ -1,6 +1,24 @@
-define(function () {
+define(['lodash-amd/modern/arrays/flatten'], function (flatten) {
 
   'use strict';
+
+  // TODO: scribe-common
+  function prevAll(el) {
+      var all = [];
+      while ((el = el.previousSibling)) {
+          all.push(el);
+      }
+      return all.reverse();
+  }
+
+  // TODO: scribe-common
+  function nextAll(el) {
+      var all = [];
+      while ((el = el.nextSibling)) {
+          all.push(el);
+      }
+      return all;
+  }
 
   return function () {
 
@@ -25,34 +43,60 @@ define(function () {
       scribe.registerHTMLFormatter('normalize', substituteCurlyQuotes);
 
       function input(event) {
-        var curlyChar;
+        // Only substitute if we're not inside text that looks like HTML
+        // (`<*>`)
+        if (! isCaretInsideHtmlTag()) {
+          var curlyChar;
 
-        // If previous char is real content, close quote; else, open
-        // TODO: annoying Chrome/Firefox
-        var currentChar = keys[event.charCode];
-        if (currentChar === '"') {
-          if (wordBeforeSelectedRange()) {
-            curlyChar = closeDoubleCurly;
-          } else {
-            curlyChar = openDoubleCurly;
+          // If previous char is real content, close quote; else, open
+          // TODO: annoying Chrome/Firefox
+          var currentChar = keys[event.charCode];
+          if (currentChar === '"') {
+            if (wordBeforeSelectedRange()) {
+              curlyChar = closeDoubleCurly;
+            } else {
+              curlyChar = openDoubleCurly;
+            }
+          } else if (currentChar === '\'') {
+            if (wordBeforeSelectedRange()) {
+              curlyChar = closeSingleCurly;
+            } else {
+              curlyChar = openSingleCurly;
+            }
           }
-        } else if (currentChar === '\'') {
-          if (wordBeforeSelectedRange()) {
-            curlyChar = closeSingleCurly;
-          } else {
-            curlyChar = openSingleCurly;
+
+          // Substitute entered char with curly replacement
+          if (curlyChar) {
+            event.preventDefault();
+
+            scribe.transactionManager.run(function() {
+              var quoteText = replaceSelectedRangeWith(curlyChar);
+              placeCaretAfter(quoteText);
+            });
           }
         }
+      }
 
-        // Substitute entered char with curly replacement
-        if (curlyChar) {
-          event.preventDefault();
+      function isCaretInsideHtmlTag() {
+        var selection = new scribe.api.Selection();
+        // TODO: What about inside inline elements? Edge case?
+        // TODO: Will this always be a text node?
+        var selectedNode = selection.selection.anchorNode;
+        var caretOffset = selection.selection.anchorOffset;
+        var textFromStartOfLine = flatten([
+          prevAll(selectedNode).map(function (node) {
+            return node.textContent;
+          }),
+          selectedNode.textContent.slice(0, caretOffset)
+        ]).join('');
+        var textToEndOfLine = flatten([
+          selectedNode.textContent.slice(caretOffset),
+          nextAll(selectedNode).map(function (node) {
+            return node.textContent;
+          })
+        ]).join('');
 
-          scribe.transactionManager.run(function() {
-            var quoteText = replaceSelectedRangeWith(curlyChar);
-            placeCaretAfter(quoteText);
-          });
-        }
+        return /<[^>]*$/.test(textFromStartOfLine) && /^[^<]*>/.test(textToEndOfLine);
       }
 
       function wordBeforeSelectedRange() {

@@ -8,6 +8,7 @@ var when = helpers.when;
 var given = helpers.given;
 var initializeScribe = helpers.initializeScribe.bind(null, '../../bower_components/scribe/src/scribe');
 var seleniumBugs = helpers.seleniumBugs;
+var givenContentOf = helpers.givenContentOf;
 var browserName = helpers.browserName;
 
 // Get new referenceS each time a new instance is created
@@ -381,6 +382,48 @@ describe('curly quotes plugin', function () {
       it('should not convert them to curly quotes', function () {
         return scribeNode.getInnerHTML().then(function (innerHTML) {
           expect(innerHTML).to.equal('<p>&lt;p class="foo"&gt;1&lt;/p&gt;</p>');
+        });
+      });
+    });
+  });
+
+  givenContentOf('&lt;|&gt;', function () {
+    when('the user types an ascii single quote', function () {
+      beforeEach(function () {
+        return scribeNode.sendKeys('\'');
+      });
+
+      it('should not convert to a curly single quote', function () {
+        return scribeNode.getInnerHTML().then(function (innerHTML) {
+          expect(innerHTML).to.have.html('<p>&lt;\'&gt;</p>');
+        });
+      });
+    });
+  });
+
+  givenContentOf('&lt;|&gt;', function () {
+    when('the user types an ascii double quote', function () {
+      beforeEach(function () {
+        return scribeNode.sendKeys('"');
+      });
+
+      it('should not convert to a curly double quote', function () {
+        return scribeNode.getInnerHTML().then(function (innerHTML) {
+          expect(innerHTML).to.have.html('<p>&lt;"&gt;</p>');
+        });
+      });
+    });
+  });
+
+  givenContentOf('&lt;foo|&gt;', function () {
+    when('the user types content containing ascii single quotes (e.g. HTML attributes)', function () {
+      beforeEach(function () {
+        return scribeNode.sendKeys(' bar=\'baz\'');
+      });
+
+      it('should not convert to curly single quotes', function () {
+        return scribeNode.getInnerHTML().then(function (innerHTML) {
+          expect(innerHTML).to.have.html('<p>&lt;foo bar=\'baz\'&gt;</p>');
         });
       });
     });
