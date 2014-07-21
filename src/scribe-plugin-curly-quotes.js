@@ -62,8 +62,8 @@ define(['lodash-amd/modern/arrays/flatten'], function (flatten) {
 
         // Only substitute if we're not inside text that looks like HTML
         // (`<*>`)
-        var looksLikeHtml = /<[^>]*$/.test(textFromStartOfLine) && /^[^<]*>/.test(textToEndOfLine);
-        if (! looksLikeHtml) {
+        var insideHtmlTag = /<[^>]*$/.test(textFromStartOfLine) && /^[^<]*>/.test(textToEndOfLine);
+        if (! insideHtmlTag) {
           var curlyChar;
 
           // If previous char is real content, close quote; else, open
