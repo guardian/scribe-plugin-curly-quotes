@@ -421,7 +421,7 @@ describe('curly quotes plugin', function () {
         return scribeNode.sendKeys(' bar=\'baz\'');
       });
 
-      it('should not insert a curly double quote instead', function () {
+      it('should not insert curly single quotes instead', function () {
         return scribeNode.getInnerHTML().then(function (innerHTML) {
           expect(innerHTML).to.have.html('<p>&lt;foo bar=\'baz\'&gt;</p>');
         });
