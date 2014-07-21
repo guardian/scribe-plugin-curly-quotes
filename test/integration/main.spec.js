@@ -416,7 +416,7 @@ describe('curly quotes plugin', function () {
   });
 
   givenContentOf('&lt;foo|&gt;', function () {
-    when('the user types an ascii double quote', function () {
+    when('the user types content containing ascii single quotes (e.g. HTML attributes)', function () {
       beforeEach(function () {
         return scribeNode.sendKeys(' bar=\'baz\'');
       });
