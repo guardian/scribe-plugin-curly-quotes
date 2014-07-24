@@ -1,31 +1,8 @@
-define(['lodash-amd/modern/arrays/flatten'], function (flatten) {
+define([], function () {
 
   'use strict';
 
-  // TODO: scribe-common
-  function prevAll(el) {
-      var all = [];
-      while ((el = el.previousSibling)) {
-          all.push(el);
-      }
-      return all.reverse();
-  }
-
-  // TODO: scribe-common
-  function nextAll(el) {
-      var all = [];
-      while ((el = el.nextSibling)) {
-          all.push(el);
-      }
-      return all;
-  }
-
   return function () {
-
-    var keys = {
-      34: '"',
-      39: '\''
-    };
 
     var openDoubleCurly = '“';
     var closeDoubleCurly = '”';
@@ -36,109 +13,41 @@ define(['lodash-amd/modern/arrays/flatten'], function (flatten) {
     var NON_BREAKING_SPACE = '\u00A0';
 
     return function (scribe) {
-      // Substitute quotes while typing
-      scribe.el.addEventListener('keypress', input);
+      /**
+       * Run the formatter as you type on the current paragraph.
+       *
+       * FIXME: We wouldn't have to do this if the formatters were run on text
+       * node mutations, but that's expensive unil we have a virtual DOM.
+       */
+
+      var keys = {
+        34: '"',
+        39: '\''
+      };
+      var curlyQuoteChar;
+
+      // `input` doesn't tell us what key was pressed, so we grab it beforehand
+      scribe.el.addEventListener('keypress', function (event) {
+        curlyQuoteChar = keys[event.charCode];
+      });
+
+      scribe.el.addEventListener('input', function (event) {
+        if (curlyQuoteChar) {
+          var selection = new scribe.api.Selection();
+          var pElement = selection.getContaining(function (node) {
+            return node.nodeName === 'P';
+          });
+          selection.placeMarkers();
+          pElement.innerHTML = substituteCurlyQuotes(pElement.innerHTML);
+          selection.selectMarkers();
+        }
+      });
 
       // Substitute quotes on setting content or paste
       scribe.registerHTMLFormatter('normalize', substituteCurlyQuotes);
 
-      function input(event) {
-        // Only substitute if we're not inside text that looks like HTML
-        // (`<*>`)
-        if (! isCaretInsideHtmlTag()) {
-          var curlyChar;
-
-          // If previous char is real content, close quote; else, open
-          // TODO: annoying Chrome/Firefox
-          var currentChar = keys[event.charCode];
-          if (currentChar === '"') {
-            if (wordBeforeSelectedRange()) {
-              curlyChar = closeDoubleCurly;
-            } else {
-              curlyChar = openDoubleCurly;
-            }
-          } else if (currentChar === '\'') {
-            if (wordBeforeSelectedRange()) {
-              curlyChar = closeSingleCurly;
-            } else {
-              curlyChar = openSingleCurly;
-            }
-          }
-
-          // Substitute entered char with curly replacement
-          if (curlyChar) {
-            event.preventDefault();
-
-            scribe.transactionManager.run(function() {
-              var quoteText = replaceSelectedRangeWith(curlyChar);
-              placeCaretAfter(quoteText);
-            });
-          }
-        }
-      }
-
-      function isCaretInsideHtmlTag() {
-        var selection = new scribe.api.Selection();
-        // TODO: What about inside inline elements? Edge case?
-        // TODO: Will this always be a text node?
-        var selectedNode = selection.selection.anchorNode;
-        var caretOffset = selection.selection.anchorOffset;
-        var textFromStartOfLine = flatten([
-          prevAll(selectedNode).map(function (node) {
-            return node.textContent;
-          }),
-          selectedNode.textContent.slice(0, caretOffset)
-        ]).join('');
-        var textToEndOfLine = flatten([
-          selectedNode.textContent.slice(caretOffset),
-          nextAll(selectedNode).map(function (node) {
-            return node.textContent;
-          })
-        ]).join('');
-
-        return /<[^>]*$/.test(textFromStartOfLine) && /^[^<]*>/.test(textToEndOfLine);
-      }
-
-      function wordBeforeSelectedRange() {
-        var prevChar = charBeforeSelectedRange() || '';
-        return isWordCharacter(prevChar);
-      }
-
-      function charBeforeSelectedRange() {
-        var selection = new scribe.api.Selection();
-        var context = selection.range.commonAncestorContainer.textContent;
-        return context[selection.range.startOffset - 1];
-      }
-
-      function charAfterSelectedRange() {
-        var selection = new scribe.api.Selection();
-        var context = selection.range.commonAncestorContainer.textContent;
-        return context[selection.range.endOffset];
-      }
-
       function isWordCharacter(character) {
           return /[^\s()]/.test(character);
-      }
-
-      /** Delete any selected text, insert text instead */
-      function replaceSelectedRangeWith(text) {
-        var textNode = document.createTextNode(text);
-
-        var selection = new scribe.api.Selection();
-        selection.range.deleteContents();
-        selection.range.insertNode(textNode);
-
-        return textNode;
-      }
-
-      function placeCaretAfter(node) {
-        var rangeAfter = document.createRange();
-        rangeAfter.setStartAfter(node);
-        rangeAfter.setEndAfter(node);
-
-        var selection = new scribe.api.Selection();
-        selection.selection.removeAllRanges();
-        selection.selection.addRange(rangeAfter);
       }
 
       function substituteCurlyQuotes(html) {

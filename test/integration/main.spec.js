@@ -48,7 +48,7 @@ describe('curly quotes plugin', function () {
 
         return scribeNode.getInnerHTML().then(function (innerHTML) {
           // Firefox (23, 24, 25): '<p>“””<br></p>'
-          expect(innerHTML).to.have.html('<p>“<bogus-br></p>');
+          expect(innerHTML).to.have.html('<p>“<firefox-bogus-br></p>');
         });
       });
     });

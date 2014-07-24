@@ -1,8 +1,5 @@
 {
   "name": "scribe-plugin-curly-quotes",
-  "dependencies": {
-    "lodash-amd": "2.4.1"
-  },
   "devDependencies": {
     "requirejs": "~2.1.9",
     "scribe": "guardian/scribe#master"
