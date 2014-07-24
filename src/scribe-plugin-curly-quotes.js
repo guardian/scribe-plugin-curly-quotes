@@ -31,6 +31,7 @@ define([], function () {
         curlyQuoteChar = keys[event.charCode];
       });
 
+      // When the character is actually inserted, format it to transform.
       scribe.el.addEventListener('input', function (event) {
         if (curlyQuoteChar) {
           var selection = new scribe.api.Selection();
