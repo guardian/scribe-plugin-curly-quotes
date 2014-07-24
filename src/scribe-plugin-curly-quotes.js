@@ -41,6 +41,8 @@ define([], function () {
           selection.placeMarkers();
           pElement.innerHTML = substituteCurlyQuotes(pElement.innerHTML);
           selection.selectMarkers();
+          // Reset
+          curlyQuoteChar = undefined;
         }
       });
 
