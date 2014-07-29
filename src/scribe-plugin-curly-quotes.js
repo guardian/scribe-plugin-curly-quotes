@@ -64,7 +64,7 @@ define([], function () {
         mapTextNodes(holder, function(str) {
           // Tokenise HTML elements vs text between them
           // Note: this is escaped HTML in the text node!
-          var tokens = str.split(/(<[^>]+?>)/);
+          var tokens = str.split(/(<[^>]+?>(?:.*<\/[^>]+?>)?)/);
           return tokens.map(function(token) {
             // Only replace quotes in text between (potential) HTML elements
             if (token[0] === '<') {

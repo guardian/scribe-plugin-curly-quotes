@@ -281,16 +281,44 @@ describe('curly quotes plugin', function () {
       });
     });
 
-    when('inserting escaped HTML with single quoted attributes', function () {
+    when('inserting escaped HTML for an element with single quoted attributes', function () {
       beforeEach(function () {
         return driver.executeScript(function () {
           window.scribe.insertHTML('<p>&lt;p class=\'foo\'&gt;1&lt;/p&gt;</p>');
         });
       });
 
-      it('should not convert them to curly quotes', function () {
+      it('should not convert the single quoted attributes to curly quotes', function () {
         return scribeNode.getInnerHTML().then(function (innerHTML) {
           expect(innerHTML).to.equal('<p>&lt;p class=\'foo\'&gt;1&lt;/p&gt;</p>');
+        });
+      });
+    });
+
+    when('inserting escaped HTML for an element with single quoted contents', function () {
+      beforeEach(function () {
+        return driver.executeScript(function () {
+          window.scribe.insertHTML('<p>&lt;p&gt;\'1\'&lt;/p&gt;</p>');
+        });
+      });
+
+      it('should not convert the single quoted contents to curly quotes', function () {
+        return scribeNode.getInnerHTML().then(function (innerHTML) {
+          expect(innerHTML).to.equal('<p>&lt;p&gt;\'1\'&lt;/p&gt;</p>');
+        });
+      });
+    });
+
+    when('inserting escaped HTML for a self-closing element and single quoted attributes', function () {
+      beforeEach(function () {
+        return driver.executeScript(function () {
+          window.scribe.insertHTML('<p>&lt;iframe class=\'foo\'&gt;</p>');
+        });
+      });
+
+      it('should not convert the single quoted attributes to curly quotes', function () {
+        return scribeNode.getInnerHTML().then(function (innerHTML) {
+          expect(innerHTML).to.equal('<p>&lt;iframe class=\'foo\'&gt;</p>');
         });
       });
     });
