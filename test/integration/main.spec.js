@@ -456,16 +456,72 @@ describe('curly quotes plugin', function () {
 
     // TODO: We could use insertPlainText, or better, rewrite much of
     // this as a unit test where that would not be a concern
-    when('inserting escaped HTML with double quoted attributes', function () {
+    when('inserting escaped HTML for an element with double quoted attributes', function () {
       beforeEach(function () {
         return driver.executeScript(function () {
           window.scribe.insertHTML('<p>&lt;p class="foo"&gt;1&lt;/p&gt;</p>');
         });
       });
 
-      it('should not convert them to curly quotes', function () {
+      it('should not convert the double quoted attributes to curly quotes', function () {
         return scribeNode.getInnerHTML().then(function (innerHTML) {
           expect(innerHTML).to.equal('<p>&lt;p class="foo"&gt;1&lt;/p&gt;</p>');
+        });
+      });
+    });
+
+    when('inserting escaped HTML for an element with double quoted contents', function () {
+      beforeEach(function () {
+        return driver.executeScript(function () {
+          window.scribe.insertHTML('<p>&lt;p&gt;"1"&lt;/p&gt;</p>');
+        });
+      });
+
+      it('should convert the double quoted contents to curly quotes', function () {
+        return scribeNode.getInnerHTML().then(function (innerHTML) {
+          expect(innerHTML).to.equal('<p>&lt;p&gt;“1”&lt;/p&gt;</p>');
+        });
+      });
+    });
+
+    when('inserting escaped HTML for a self-closing element and double quoted attributes', function () {
+      beforeEach(function () {
+        return driver.executeScript(function () {
+          window.scribe.insertHTML('<p>&lt;iframe class="foo"&gt;</p>');
+        });
+      });
+
+      it('should not convert the double quoted attributes to curly quotes', function () {
+        return scribeNode.getInnerHTML().then(function (innerHTML) {
+          expect(innerHTML).to.equal('<p>&lt;iframe class="foo"&gt;</p>');
+        });
+      });
+    });
+
+    when('inserting escaped HTML for a SCRIPT element with double quoted contents', function () {
+      beforeEach(function () {
+        return driver.executeScript(function () {
+          window.scribe.insertHTML('<p>&lt;script&gt;"1"&lt;/script&gt;</p>');
+        });
+      });
+
+      it('should not convert the double quoted contents to curly quotes', function () {
+        return scribeNode.getInnerHTML().then(function (innerHTML) {
+          expect(innerHTML).to.equal('<p>&lt;script&gt;"1"&lt;/script&gt;</p>');
+        });
+      });
+    });
+
+    when('inserting escaped HTML for a STYLE element with double quoted contents', function () {
+      beforeEach(function () {
+        return driver.executeScript(function () {
+          window.scribe.insertHTML('<p>&lt;style&gt;"1"&lt;/style&gt;</p>');
+        });
+      });
+
+      it('should not convert the double quoted contents to curly quotes', function () {
+        return scribeNode.getInnerHTML().then(function (innerHTML) {
+          expect(innerHTML).to.equal('<p>&lt;style&gt;"1"&lt;/style&gt;</p>');
         });
       });
     });
