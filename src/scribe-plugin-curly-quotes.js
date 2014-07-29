@@ -68,6 +68,7 @@ define([], function () {
           var tokens = str.split(/(<[^>]+?>(?:.*<\/[^>]+?>)?)/);
           return tokens.map(function(token) {
             // Only replace quotes in text between (potential) HTML elements
+            // which are not SCRIPT or STYLE
             if (/^<(script|style)/i.test(token)) {
               return token;
             } else {
