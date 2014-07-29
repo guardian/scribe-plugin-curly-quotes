@@ -302,9 +302,9 @@ describe('curly quotes plugin', function () {
         });
       });
 
-      it('should not convert the single quoted contents to curly quotes', function () {
+      it('should convert the single quoted contents to curly quotes', function () {
         return scribeNode.getInnerHTML().then(function (innerHTML) {
-          expect(innerHTML).to.equal('<p>&lt;p&gt;\'1\'&lt;/p&gt;</p>');
+          expect(innerHTML).to.equal('<p>&lt;p&gt;‘1’&lt;/p&gt;</p>');
         });
       });
     });
@@ -319,6 +319,34 @@ describe('curly quotes plugin', function () {
       it('should not convert the single quoted attributes to curly quotes', function () {
         return scribeNode.getInnerHTML().then(function (innerHTML) {
           expect(innerHTML).to.equal('<p>&lt;iframe class=\'foo\'&gt;</p>');
+        });
+      });
+    });
+
+    when('inserting escaped HTML for a SCRIPT element with single quoted contents', function () {
+      beforeEach(function () {
+        return driver.executeScript(function () {
+          window.scribe.insertHTML('<p>&lt;script&gt;\'1\'&lt;/script&gt;</p>');
+        });
+      });
+
+      it('should not convert the single quoted contents to curly quotes', function () {
+        return scribeNode.getInnerHTML().then(function (innerHTML) {
+          expect(innerHTML).to.equal('<p>&lt;script&gt;\'1\'&lt;/script&gt;</p>');
+        });
+      });
+    });
+
+    when('inserting escaped HTML for a STYLE element with single quoted contents', function () {
+      beforeEach(function () {
+        return driver.executeScript(function () {
+          window.scribe.insertHTML('<p>&lt;style&gt;\'1\'&lt;/style&gt;</p>');
+        });
+      });
+
+      it('should not convert the single quoted contents to curly quotes', function () {
+        return scribeNode.getInnerHTML().then(function (innerHTML) {
+          expect(innerHTML).to.equal('<p>&lt;style&gt;\'1\'&lt;/style&gt;</p>');
         });
       });
     });
