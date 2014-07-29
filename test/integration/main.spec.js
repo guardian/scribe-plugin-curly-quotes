@@ -177,6 +177,20 @@ describe('curly quotes plugin', function () {
 
     /* Single quotes */
 
+    when('inserting single quotes around a single character', function () {
+      beforeEach(function () {
+        return driver.executeScript(function () {
+          window.scribe.insertHTML('<p>\'1\'</p>');
+        });
+      });
+
+      it('should replace with curly quotes instead', function () {
+        return scribeNode.getInnerHTML().then(function (innerHTML) {
+          expect(innerHTML).to.equal('<p>‘1’</p>');
+        });
+      });
+    });
+
     when('inserting single quotes around a word', function () {
       beforeEach(function () {
         return driver.executeScript(function () {
@@ -267,22 +281,66 @@ describe('curly quotes plugin', function () {
       });
     });
 
-    when('inserting escaped HTML with single quoted attributes', function () {
+    // It's easier just to ignore all text that looks like HTML, instead of just
+    // SCRIPT/STYLE.
+    when('inserting escaped HTML for an element with single quoted attributes', function () {
       beforeEach(function () {
         return driver.executeScript(function () {
           window.scribe.insertHTML('<p>&lt;p class=\'foo\'&gt;1&lt;/p&gt;</p>');
         });
       });
 
-      it('should not convert them to curly quotes', function () {
+      it('should not convert the single quoted attributes to curly quotes', function () {
         return scribeNode.getInnerHTML().then(function (innerHTML) {
           expect(innerHTML).to.equal('<p>&lt;p class=\'foo\'&gt;1&lt;/p&gt;</p>');
         });
       });
     });
 
+    when('inserting escaped HTML for an element with single quoted contents', function () {
+      beforeEach(function () {
+        return driver.executeScript(function () {
+          window.scribe.insertHTML('<p>&lt;p&gt;\'1\'&lt;/p&gt;</p>');
+        });
+      });
+
+      it('should not convert the single quoted contents to curly quotes', function () {
+        return scribeNode.getInnerHTML().then(function (innerHTML) {
+          expect(innerHTML).to.equal('<p>&lt;p&gt;\'1\'&lt;/p&gt;</p>');
+        });
+      });
+    });
+
+    when('inserting escaped HTML for a self-closing element and single quoted attributes', function () {
+      beforeEach(function () {
+        return driver.executeScript(function () {
+          window.scribe.insertHTML('<p>&lt;iframe class=\'foo\'&gt;</p>');
+        });
+      });
+
+      it('should not convert the single quoted attributes to curly quotes', function () {
+        return scribeNode.getInnerHTML().then(function (innerHTML) {
+          expect(innerHTML).to.equal('<p>&lt;iframe class=\'foo\'&gt;</p>');
+        });
+      });
+    });
+
 
     /* Double quotes */
+
+    when('inserting double quotes around a single character', function () {
+      beforeEach(function () {
+        return driver.executeScript(function () {
+          window.scribe.insertHTML('<p>"1"</p>');
+        });
+      });
+
+      it('should replace with curly quotes instead', function () {
+        return scribeNode.getInnerHTML().then(function (innerHTML) {
+          expect(innerHTML).to.equal('<p>“1”</p>');
+        });
+      });
+    });
 
     when('inserting double quotes around a word', function () {
       beforeEach(function () {
@@ -372,16 +430,44 @@ describe('curly quotes plugin', function () {
 
     // TODO: We could use insertPlainText, or better, rewrite much of
     // this as a unit test where that would not be a concern
-    when('inserting escaped HTML with double quoted attributes', function () {
+    when('inserting escaped HTML for an element with double quoted attributes', function () {
       beforeEach(function () {
         return driver.executeScript(function () {
           window.scribe.insertHTML('<p>&lt;p class="foo"&gt;1&lt;/p&gt;</p>');
         });
       });
 
-      it('should not convert them to curly quotes', function () {
+      it('should not convert the double quoted attributes to curly quotes', function () {
         return scribeNode.getInnerHTML().then(function (innerHTML) {
           expect(innerHTML).to.equal('<p>&lt;p class="foo"&gt;1&lt;/p&gt;</p>');
+        });
+      });
+    });
+
+    when('inserting escaped HTML for an element with double quoted contents', function () {
+      beforeEach(function () {
+        return driver.executeScript(function () {
+          window.scribe.insertHTML('<p>&lt;p&gt;"1"&lt;/p&gt;</p>');
+        });
+      });
+
+      it('should not convert the double quoted contents to curly quotes', function () {
+        return scribeNode.getInnerHTML().then(function (innerHTML) {
+          expect(innerHTML).to.equal('<p>&lt;p&gt;"1"&lt;/p&gt;</p>');
+        });
+      });
+    });
+
+    when('inserting escaped HTML for a self-closing element and double quoted attributes', function () {
+      beforeEach(function () {
+        return driver.executeScript(function () {
+          window.scribe.insertHTML('<p>&lt;iframe class="foo"&gt;</p>');
+        });
+      });
+
+      it('should not convert the double quoted attributes to curly quotes', function () {
+        return scribeNode.getInnerHTML().then(function (innerHTML) {
+          expect(innerHTML).to.equal('<p>&lt;iframe class="foo"&gt;</p>');
         });
       });
     });
