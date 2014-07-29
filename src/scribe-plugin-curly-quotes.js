@@ -84,7 +84,7 @@ define([], function () {
       // recursively instead of with a global match because the latter would
       // not detect overlaps, e.g. "'1'" (text can only be matched once).
       function convert(str) {
-        if (! /([\s\S])?'|"([\s\S])?/.test(str)) {
+        if (! /['"]/.test(str)) {
           return str;
         } else {
           var foo = str.
