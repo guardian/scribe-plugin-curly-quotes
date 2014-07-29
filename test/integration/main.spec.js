@@ -177,6 +177,20 @@ describe('curly quotes plugin', function () {
 
     /* Single quotes */
 
+    when('inserting single quotes around a single character', function () {
+      beforeEach(function () {
+        return driver.executeScript(function () {
+          window.scribe.insertHTML('<p>\'1\'</p>');
+        });
+      });
+
+      it('should replace with curly quotes instead', function () {
+        return scribeNode.getInnerHTML().then(function (innerHTML) {
+          expect(innerHTML).to.equal('<p>‘1’</p>');
+        });
+      });
+    });
+
     when('inserting single quotes around a word', function () {
       beforeEach(function () {
         return driver.executeScript(function () {
@@ -283,6 +297,20 @@ describe('curly quotes plugin', function () {
 
 
     /* Double quotes */
+
+    when('inserting double quotes around a single character', function () {
+      beforeEach(function () {
+        return driver.executeScript(function () {
+          window.scribe.insertHTML('<p>"1"</p>');
+        });
+      });
+
+      it('should replace with curly quotes instead', function () {
+        return scribeNode.getInnerHTML().then(function (innerHTML) {
+          expect(innerHTML).to.equal('<p>“1”</p>');
+        });
+      });
+    });
 
     when('inserting double quotes around a word', function () {
       beforeEach(function () {

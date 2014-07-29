@@ -70,17 +70,29 @@ define([], function () {
             if (token[0] === '<') {
               return token;
             } else {
-              return token.
-                // Use [\s\S] instead of . to match any characters _including newlines_
-                replace(/([\s\S])?'([\s\S])?/g,
-                        replaceQuotesFromContext(openSingleCurly, closeSingleCurly)).
-                replace(/([\s\S])?"([\s\S])?/g,
-                        replaceQuotesFromContext(openDoubleCurly, closeDoubleCurly));
+              return convert(token);
             }
           }).join('');
         });
 
         return holder.innerHTML;
+      }
+
+      // Recursively convert the quotes to curly quotes. We have to do this
+      // recursively instead of with a global match because the latter would
+      // not detect overlaps, e.g. "'1'" (text can only be matched once).
+      function convert(str) {
+        if (! /([\s\S])?'|"([\s\S])?/.test(str)) {
+          return str;
+        } else {
+          var foo = str.
+            // Use [\s\S] instead of . to match any characters _including newlines_
+            replace(/([\s\S])?'([\s\S])?/,
+                    replaceQuotesFromContext(openSingleCurly, closeSingleCurly)).
+            replace(/([\s\S])?"([\s\S])?/,
+                    replaceQuotesFromContext(openDoubleCurly, closeDoubleCurly));
+          return convert(foo);
+        }
       }
 
       function replaceQuotesFromContext(openCurly, closeCurly) {
