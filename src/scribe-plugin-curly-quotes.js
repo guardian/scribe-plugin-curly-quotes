@@ -69,22 +69,10 @@ define([], function () {
           return tokens.map(function(token) {
             // Only replace quotes in text between (potential) HTML elements
             // which are not SCRIPT or STYLE
-            if (/^<(script|style)/i.test(token)) {
+            if (/^</.test(token)) {
               return token;
             } else {
-              if (/^</.test(token)) {
-                // Split by tags
-                var newTokens = token.split(/(<[^>]+?>)/);
-                return newTokens.map(function (newToken) {
-                  if (/^</.test(newToken)) {
-                    return newToken;
-                  } else {
-                    return convert(newToken);
-                  }
-                }).join('');
-              } else {
-                return convert(token);
-              }
+              return convert(token);
             }
           }).join('');
         });
