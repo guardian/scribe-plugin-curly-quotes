@@ -1,6 +1,6 @@
 {
   "name": "scribe-plugin-curly-quotes",
-  "version": "0.1.4",
+  "version": "0.1.6",
   "main": "src/scribe-plugin-curly-quotes.js",
   "dependencies": {
     "scribe-common": "~0.0.5"
