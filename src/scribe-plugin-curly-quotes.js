@@ -151,7 +151,6 @@ define(['scribe-common/src/element'], function (element) {
             node.data = func(prevTextNodes, node.data);
             prevTextNodes += node.data;
           } while ((node = walker.nextSibling()));
-          prevTextNodes = '';
         }
       }
 
