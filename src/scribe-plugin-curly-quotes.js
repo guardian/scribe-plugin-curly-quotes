@@ -32,7 +32,7 @@ define(['scribe-common/src/element'], function (element) {
       });
 
       // When the character is actually inserted, format it to transform.
-      scribe.el.addEventListener('input', function (event) {
+      scribe.el.addEventListener('input', function () {
         if (curlyQuoteChar) {
           var selection = new scribe.api.Selection();
           // FIXME: This won't work in inline mode
