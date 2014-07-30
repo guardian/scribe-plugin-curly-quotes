@@ -1,4 +1,4 @@
-define([], function () {
+define(['scribe-common/src/element'], function (element) {
 
   'use strict';
 
@@ -35,11 +35,10 @@ define([], function () {
       scribe.el.addEventListener('input', function (event) {
         if (curlyQuoteChar) {
           var selection = new scribe.api.Selection();
-          var pElement = selection.getContaining(function (node) {
-            return node.nodeName === 'P';
-          });
+          // FIXME: This won't work in inline mode
+          var containingBlockElement = selection.getContaining(element.isBlockElement);
           selection.placeMarkers();
-          pElement.innerHTML = substituteCurlyQuotes(pElement.innerHTML);
+          containingBlockElement.innerHTML = substituteCurlyQuotes(containingBlockElement.innerHTML);
           selection.selectMarkers();
           // Reset
           curlyQuoteChar = undefined;

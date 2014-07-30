@@ -2,6 +2,9 @@
   "name": "scribe-plugin-curly-quotes",
   "version": "0.1.4",
   "main": "src/scribe-plugin-curly-quotes.js",
+  "dependencies": {
+    "scribe-common": "~0.0.5"
+  },
   "devDependencies": {
     "chai": "~1.9.1",
     "http-server": "~0.6.1",

@@ -1,5 +1,8 @@
 {
   "name": "scribe-plugin-curly-quotes",
+  "dependencies": {
+    "scribe-common": "~0.0.5"
+  },
   "devDependencies": {
     "requirejs": "~2.1.9",
     "scribe": "guardian/scribe#master"
