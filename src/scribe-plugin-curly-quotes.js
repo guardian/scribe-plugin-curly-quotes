@@ -135,6 +135,7 @@ define(['scribe-common/src/element'], function (elementHelpers) {
             element = elementWalker.nextSibling();
           }
         } else {
+          // Map the text nodes inside this element
           mapTextNodes(container, func);
         }
       }
