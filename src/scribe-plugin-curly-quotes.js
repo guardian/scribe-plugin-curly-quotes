@@ -127,11 +127,10 @@ define(['scribe-common/src/element'], function (element) {
           var elementWalker = document.createTreeWalker(container, NodeFilter.SHOW_ELEMENT);
           var element = elementWalker.firstChild();
           // TODO: If block only, do not match inline elements, e.g. markers
-          if (element) {
-            // Walk all the text nodes inside this element
-            do {
-              mapTextNodes(element, func);
-            } while ((element = elementWalker.nextSibling()));
+          // Walk all the text nodes inside this element
+          while (element) {
+            mapTextNodes(element, func);
+            element = elementWalker.nextSibling();
           }
         } else {
           mapTextNodes(container, func);
@@ -141,16 +140,15 @@ define(['scribe-common/src/element'], function (element) {
       function mapTextNodes(element, func) {
         var walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
         var node = walker.firstChild();
-        if (node) {
-          var prevTextNodes = '';
-          do {
-            // Split by BR
-            if (node.previousSibling && node.previousSibling.nodeName === 'BR') {
-              prevTextNodes = '';
-            }
-            node.data = func(prevTextNodes, node.data);
-            prevTextNodes += node.data;
-          } while ((node = walker.nextSibling()));
+        var prevTextNodes = '';
+        while (node) {
+          // Split by BR
+          if (node.previousSibling && node.previousSibling.nodeName === 'BR') {
+            prevTextNodes = '';
+          }
+          node.data = func(prevTextNodes, node.data);
+          prevTextNodes += node.data;
+          node = walker.nextSibling();
         }
       }
 
