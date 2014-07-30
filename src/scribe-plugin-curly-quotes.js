@@ -35,8 +35,10 @@ define(['scribe-common/src/element'], function (element) {
       scribe.el.addEventListener('input', function () {
         if (curlyQuoteChar) {
           var selection = new scribe.api.Selection();
-          // FIXME: This won't work in inline mode
-          var containingBlockElement = selection.getContaining(element.isBlockElement);
+          var containingBlockElement = scribe.allowsBlockElements()
+            ? selection.getContaining(element.isBlockElement)
+            : scribe.el;
+
           selection.placeMarkers();
           containingBlockElement.innerHTML = substituteCurlyQuotes(containingBlockElement.innerHTML);
           selection.selectMarkers();
