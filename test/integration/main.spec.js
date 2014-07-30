@@ -551,19 +551,19 @@ describe('curly quotes plugin', function () {
   // TODO: Perhaps we should run all of the tests in both block/inline elements
   // mode
   given('inline element mode', function () {
+    beforeEach(function () {
+      return initializeScribe({ allowBlockElements: false });
+    });
+
+    beforeEach(loadPlugin);
+
+    beforeEach(function () {
+      // Focus it before-hand
+      scribeNode.click();
+    });
+
     given('default content', function () {
       when('inserting single quotes around a word', function () {
-        beforeEach(function () {
-          return initializeScribe({ allowBlockElements: false });
-        });
-
-        beforeEach(loadPlugin);
-
-        beforeEach(function () {
-          // Focus it before-hand
-          scribeNode.click();
-        });
-
         beforeEach(function () {
           return driver.executeScript(function () {
             window.scribe.insertHTML('Hello \'world\'!');
