@@ -1,4 +1,4 @@
-define(['scribe-common/src/element'], function (element) {
+define(['scribe-common/src/element'], function (elementHelpers) {
 
   'use strict';
 
@@ -36,7 +36,7 @@ define(['scribe-common/src/element'], function (element) {
         if (curlyQuoteChar) {
           var selection = new scribe.api.Selection();
           var containingBlockElement = scribe.allowsBlockElements()
-            ? selection.getContaining(element.isBlockElement)
+            ? selection.getContaining(elementHelpers.isBlockElement)
             : scribe.el;
 
           selection.placeMarkers();
@@ -62,19 +62,24 @@ define(['scribe-common/src/element'], function (element) {
 
         // Replace straight single and double quotes with curly
         // equivalent in the given string
-        mapTextNodes(holder, function(str) {
+        mapElements(holder, function(prev, str) {
           // Tokenise HTML elements vs text between them
           // Note: this is escaped HTML in the text node!
           // Split by elements
-          var tokens = str.split(/(<[^>]+?>(?:.*<\/[^>]+?>)?)/);
-          return tokens.map(function(token) {
-            // Only replace quotes in text between (potential) HTML elements
-            if (/^</.test(token)) {
-              return token;
-            } else {
-              return convert(token);
-            }
-          }).join('');
+          // We tokenise with the previous text nodes for context, but
+          // only extract the current text node.
+          var tokens = (prev + str).split(/(<[^>]+?>(?:.*<\/[^>]+?>)?)/);
+          return tokens
+            .map(function(token) {
+              // Only replace quotes in text between (potential) HTML elements
+              if (/^</.test(token)) {
+                return token;
+              } else {
+                return convert(token);
+              }
+            })
+            .join('')
+            .slice(str.length * -1);
         });
 
         return holder.innerHTML;
@@ -116,16 +121,38 @@ define(['scribe-common/src/element'], function (element) {
       }
 
       // Apply a function on all text nodes in a container, mutating in place
-      function mapTextNodes(container, func) {
-        var walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT);
-        var node = walker.firstChild();
-        if (node) {
-          do {
-            node.data = func(node.data);
-          } while ((node = walker.nextSibling()));
+      function mapElements(container, func) {
+        if (scribe.allowsBlockElements()) {
+          // Walk all the [block] elements
+          var elementWalker = document.createTreeWalker(container, NodeFilter.SHOW_ELEMENT);
+          var element = elementWalker.firstChild();
+          // Map the text nodes inside this element
+          while (element) {
+            // Do not match inline elements, e.g. markers
+            if (elementHelpers.isBlockElement(element)) {
+              mapTextNodes(element, func);
+            }
+            element = elementWalker.nextSibling();
+          }
+        } else {
+          // Map the text nodes inside this element
+          mapTextNodes(container, func);
         }
+      }
 
-        return node;
+      function mapTextNodes(element, func) {
+        var walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
+        var node = walker.firstChild();
+        var prevTextNodes = '';
+        while (node) {
+          // Split by BR
+          if (node.previousSibling && node.previousSibling.nodeName === 'BR') {
+            prevTextNodes = '';
+          }
+          node.data = func(prevTextNodes, node.data);
+          prevTextNodes += node.data;
+          node = walker.nextSibling();
+        }
       }
 
     };

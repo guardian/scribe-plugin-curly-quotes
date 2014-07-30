@@ -301,6 +301,20 @@ describe('curly quotes plugin', function () {
         });
       });
 
+      when('inserting escaped HTML for an element with single quoted attributes which contains unescaped HTML', function () {
+        beforeEach(function () {
+          return driver.executeScript(function () {
+            window.scribe.insertHTML('<p>&lt;img src=\'<a>1</a>\'&gt;</p>');
+          });
+        });
+
+        it('should not convert them to curly quotes', function () {
+          return scribeNode.getInnerHTML().then(function (innerHTML) {
+            expect(innerHTML).to.equal('<p>&lt;img src=\'<a>1</a>\'&gt;</p>');
+          });
+        });
+      });
+
       when('inserting escaped HTML for an element with single quoted contents', function () {
         beforeEach(function () {
           return driver.executeScript(function () {
@@ -448,6 +462,20 @@ describe('curly quotes plugin', function () {
         });
       });
 
+      when('inserting escaped HTML for an element with double quoted attributes which contains unescaped HTML', function () {
+        beforeEach(function () {
+          return driver.executeScript(function () {
+            window.scribe.insertHTML('<p>&lt;img src="<a>1</a>"&gt;</p>');
+          });
+        });
+
+        it('should not convert them to curly quotes', function () {
+          return scribeNode.getInnerHTML().then(function (innerHTML) {
+            expect(innerHTML).to.equal('<p>&lt;img src="<a>1</a>"&gt;</p>');
+          });
+        });
+      });
+
       when('inserting escaped HTML for an element with double quoted contents', function () {
         beforeEach(function () {
           return driver.executeScript(function () {
@@ -523,19 +551,19 @@ describe('curly quotes plugin', function () {
   // TODO: Perhaps we should run all of the tests in both block/inline elements
   // mode
   given('inline element mode', function () {
+    beforeEach(function () {
+      return initializeScribe({ allowBlockElements: false });
+    });
+
+    beforeEach(loadPlugin);
+
+    beforeEach(function () {
+      // Focus it before-hand
+      scribeNode.click();
+    });
+
     given('default content', function () {
       when('inserting single quotes around a word', function () {
-        beforeEach(function () {
-          return initializeScribe({ allowBlockElements: false });
-        });
-
-        beforeEach(loadPlugin);
-
-        beforeEach(function () {
-          // Focus it before-hand
-          scribeNode.click();
-        });
-
         beforeEach(function () {
           return driver.executeScript(function () {
             window.scribe.insertHTML('Hello \'world\'!');
@@ -545,6 +573,20 @@ describe('curly quotes plugin', function () {
         it('should replace with curly single quotes instead', function () {
           return scribeNode.getInnerHTML().then(function (innerHTML) {
             expect(innerHTML).to.have.html('Hello ‘world’!<chrome-bogus-br>');
+          });
+        });
+      });
+
+      when('inserting single quotes around a word on the second line', function () {
+        beforeEach(function () {
+          return driver.executeScript(function () {
+            window.scribe.insertHTML('1<br>\'2\'');
+          });
+        });
+
+        it('should replace with curly single quotes instead', function () {
+          return scribeNode.getInnerHTML().then(function (innerHTML) {
+            expect(innerHTML).to.have.html('1<br>‘2’<chrome-bogus-br>');
           });
         });
       });
