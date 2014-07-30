@@ -576,6 +576,20 @@ describe('curly quotes plugin', function () {
           });
         });
       });
+
+      when('inserting single quotes around a word on the second line', function () {
+        beforeEach(function () {
+          return driver.executeScript(function () {
+            window.scribe.insertHTML('1<br>\'2\'');
+          });
+        });
+
+        it('should replace with curly single quotes instead', function () {
+          return scribeNode.getInnerHTML().then(function (innerHTML) {
+            expect(innerHTML).to.have.html('1<br>‘2’<chrome-bogus-br>');
+          });
+        });
+      });
     });
   });
 });

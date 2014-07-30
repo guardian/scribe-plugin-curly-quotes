@@ -144,6 +144,10 @@ define(['scribe-common/src/element'], function (element) {
         if (node) {
           var prevTextNodes = '';
           do {
+            // Split by BR
+            if (node.previousSibling && node.previousSibling.nodeName === 'BR') {
+              prevTextNodes = '';
+            }
             node.data = func(prevTextNodes, node.data);
             prevTextNodes += node.data;
           } while ((node = walker.nextSibling()));
