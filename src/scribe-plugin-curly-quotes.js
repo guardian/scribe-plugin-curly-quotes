@@ -1,4 +1,4 @@
-define(['scribe-common/src/element'], function (element) {
+define(['scribe-common/src/element'], function (elementHelpers) {
 
   'use strict';
 
@@ -36,7 +36,7 @@ define(['scribe-common/src/element'], function (element) {
         if (curlyQuoteChar) {
           var selection = new scribe.api.Selection();
           var containingBlockElement = scribe.allowsBlockElements()
-            ? selection.getContaining(element.isBlockElement)
+            ? selection.getContaining(elementHelpers.isBlockElement)
             : scribe.el;
 
           selection.placeMarkers();
@@ -126,10 +126,12 @@ define(['scribe-common/src/element'], function (element) {
           // Walk all the [block] elements
           var elementWalker = document.createTreeWalker(container, NodeFilter.SHOW_ELEMENT);
           var element = elementWalker.firstChild();
-          // TODO: If block only, do not match inline elements, e.g. markers
-          // Walk all the text nodes inside this element
+          // Map the text nodes inside this element
           while (element) {
-            mapTextNodes(element, func);
+            // Do not match inline elements, e.g. markers
+            if (elementHelpers.isBlockElement(element)) {
+              mapTextNodes(element, func);
+            }
             element = elementWalker.nextSibling();
           }
         } else {
