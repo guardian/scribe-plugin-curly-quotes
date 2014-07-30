@@ -301,6 +301,20 @@ describe('curly quotes plugin', function () {
         });
       });
 
+      when('inserting escaped HTML for an element with single quoted attributes which contains unescaped HTML', function () {
+        beforeEach(function () {
+          return driver.executeScript(function () {
+            window.scribe.insertHTML('<p>&lt;img src=\'<a>1</a>\'&gt;</p>');
+          });
+        });
+
+        it('should not convert them to curly quotes', function () {
+          return scribeNode.getInnerHTML().then(function (innerHTML) {
+            expect(innerHTML).to.equal('<p>&lt;img src=\'<a>1</a>\'&gt;</p>');
+          });
+        });
+      });
+
       when('inserting escaped HTML for an element with single quoted contents', function () {
         beforeEach(function () {
           return driver.executeScript(function () {
@@ -444,6 +458,20 @@ describe('curly quotes plugin', function () {
         it('should not convert the double quoted attributes to curly quotes', function () {
           return scribeNode.getInnerHTML().then(function (innerHTML) {
             expect(innerHTML).to.equal('<p>&lt;p class="foo"&gt;1&lt;/p&gt;</p>');
+          });
+        });
+      });
+
+      when('inserting escaped HTML for an element with double quoted attributes which contains unescaped HTML', function () {
+        beforeEach(function () {
+          return driver.executeScript(function () {
+            window.scribe.insertHTML('<p>&lt;img src="<a>1</a>"&gt;</p>');
+          });
+        });
+
+        it('should not convert them to curly quotes', function () {
+          return scribeNode.getInnerHTML().then(function (innerHTML) {
+            expect(innerHTML).to.equal('<p>&lt;img src="<a>1</a>"&gt;</p>');
           });
         });
       });
