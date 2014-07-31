@@ -85,7 +85,7 @@ define([
               }
             })
             .join('')
-            .slice(str.length * -1);
+            .slice(prev.length);
         });
 
         return holder.innerHTML;
