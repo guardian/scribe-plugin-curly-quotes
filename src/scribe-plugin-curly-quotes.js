@@ -100,28 +100,24 @@ define([
         } else {
           var foo = str.
             // Use [\s\S] instead of . to match any characters _including newlines_
-            replace(/([\s\S])?'([\s\S])?/,
+            replace(/([\s\S])?'/,
                     replaceQuotesFromContext(openSingleCurly, closeSingleCurly)).
-            replace(/([\s\S])?"([\s\S])?/,
+            replace(/([\s\S])?"/,
                     replaceQuotesFromContext(openDoubleCurly, closeDoubleCurly));
           return convert(foo);
         }
       }
 
       function replaceQuotesFromContext(openCurly, closeCurly) {
-        return function(m, prev, next) {
+        return function(m, prev) {
           prev = prev || '';
-          next = next || '';
-          var isStart = ! prev;
-          var isEnd = ! next;
           var hasCharsBefore = isWordCharacter(prev);
-          var hasCharsAfter  = isWordCharacter(next);
           // Optimistic heuristic, would need to look at DOM structure
           // (esp block vs inline elements) for more robust inference
-          if (hasCharsBefore || (isStart && ! hasCharsAfter && ! isEnd)) {
-            return prev + closeCurly + next;
+          if (hasCharsBefore) {
+            return prev + closeCurly;
           } else {
-            return prev + openCurly + next;
+            return prev + openCurly;
           }
         };
       }
