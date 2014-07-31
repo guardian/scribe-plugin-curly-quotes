@@ -128,12 +128,9 @@ define([
         // inline and block elements.
         var nestedBlockElements = toArray(containerElement.children).filter(elementHelpers.isBlockElement);
         if (nestedBlockElements.length) {
-          // Walk all the [block] elements
           nestedBlockElements.forEach(function (nestedBlockElement) {
             // Map the nested block elements
-            if (elementHelpers.isBlockElement(nestedBlockElement)) {
-              mapElements(nestedBlockElement, func);
-            }
+            mapElements(nestedBlockElement, func);
           });
         } else {
           mapTextNodes(containerElement, func);
