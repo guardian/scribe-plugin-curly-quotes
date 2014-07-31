@@ -130,20 +130,15 @@ define([
       function mapElements(containerElement, func) {
         // TODO: This heuristic breaks for elements that contain a mixture of
         // inline and block elements.
-        var hasNestedBlockElements = toArray(containerElement.children).some(elementHelpers.isBlockElement);
-        if (hasNestedBlockElements) {
+        var nestedBlockElements = toArray(containerElement.children).filter(elementHelpers.isBlockElement);
+        if (nestedBlockElements.length) {
           // Walk all the [block] elements
-          var elementWalker = document.createTreeWalker(containerElement, NodeFilter.SHOW_ELEMENT);
-          var element = elementWalker.firstChild();
-
-          // Map the text nodes inside this element
-          while (element) {
+          nestedBlockElements.forEach(function (nestedBlockElement) {
             // Map the nested block elements
-            if (elementHelpers.isBlockElement(element)) {
-              mapElements(element, func);
+            if (elementHelpers.isBlockElement(nestedBlockElement)) {
+              mapElements(nestedBlockElement, func);
             }
-            element = elementWalker.nextSibling();
-          }
+          });
         } else {
           mapTextNodes(containerElement, func);
         }
