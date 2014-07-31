@@ -1,4 +1,10 @@
-define(['scribe-common/src/element'], function (elementHelpers) {
+define([
+  'scribe-common/src/element',
+  'lodash-amd/modern/collections/toArray'
+], function (
+  elementHelpers,
+  toArray
+) {
 
   'use strict';
 
@@ -121,27 +127,31 @@ define(['scribe-common/src/element'], function (elementHelpers) {
       }
 
       // Apply a function on all text nodes in a container, mutating in place
-      function mapElements(container, func) {
-        if (scribe.allowsBlockElements()) {
+      function mapElements(containerElement, func) {
+        // TODO: This heuristic breaks for elements that contain a mixture of
+        // inline and block elements.
+        var hasNestedBlockElements = toArray(containerElement.children).some(elementHelpers.isBlockElement);
+        if (hasNestedBlockElements) {
           // Walk all the [block] elements
-          var elementWalker = document.createTreeWalker(container, NodeFilter.SHOW_ELEMENT);
+          var elementWalker = document.createTreeWalker(containerElement, NodeFilter.SHOW_ELEMENT);
           var element = elementWalker.firstChild();
+
           // Map the text nodes inside this element
           while (element) {
-            // Do not match inline elements, e.g. markers
+            // Map the nested block elements
             if (elementHelpers.isBlockElement(element)) {
-              mapTextNodes(element, func);
+              mapElements(element, func);
             }
             element = elementWalker.nextSibling();
           }
         } else {
-          // Map the text nodes inside this element
-          mapTextNodes(container, func);
+          mapTextNodes(containerElement, func);
         }
       }
 
-      function mapTextNodes(element, func) {
-        var walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
+      function mapTextNodes(containerElement, func) {
+        // TODO: Only walk inside of text nodes within inline elements
+        var walker = document.createTreeWalker(containerElement, NodeFilter.SHOW_TEXT);
         var node = walker.firstChild();
         var prevTextNodes = '';
         while (node) {

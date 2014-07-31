@@ -291,10 +291,24 @@ describe('curly quotes plugin', function () {
           });
         });
 
+        it('should replace with curly single quotes instead', function () {
+          return scribeNode.getInnerHTML().then(function (innerHTML) {
+            expect(innerHTML).to.equal('<blockquote><p>1</p><p>‘2’</p></blockquote>');
+          });
+        });
+      });
+
+      when('inserting single quotes inside an inline element that is the sibling of a block element', function () {
+        beforeEach(function () {
+          return driver.executeScript(function () {
+            window.scribe.insertHTML('<blockquote><p>1</p><span>\'2\'</span></blockquote>');
+          });
+        });
+
         // FIXME:
         it.skip('should replace with curly single quotes instead', function () {
           return scribeNode.getInnerHTML().then(function (innerHTML) {
-            expect(innerHTML).to.equal('<blockquote><p>1</p><p>‘2’</p></blockquote>');
+            expect(innerHTML).to.equal('<blockquote><p>1</p><span>‘2’</span></blockquote>');
           });
         });
       });
