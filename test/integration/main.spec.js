@@ -270,6 +270,35 @@ describe('curly quotes plugin', function () {
         });
       });
 
+      when('inserting single quotes inside a nested block element', function () {
+        beforeEach(function () {
+          return driver.executeScript(function () {
+            window.scribe.insertHTML('<blockquote><p>\'2\'</p></blockquote>');
+          });
+        });
+
+        it('should replace with curly single quotes instead', function () {
+          return scribeNode.getInnerHTML().then(function (innerHTML) {
+            expect(innerHTML).to.equal('<blockquote><p>‘2’</p></blockquote>');
+          });
+        });
+      });
+
+      when('inserting single quotes inside a nested block element that is not the first child node', function () {
+        beforeEach(function () {
+          return driver.executeScript(function () {
+            window.scribe.insertHTML('<blockquote><p>1</p><p>\'2\'</p></blockquote>');
+          });
+        });
+
+        // FIXME:
+        it.skip('should replace with curly single quotes instead', function () {
+          return scribeNode.getInnerHTML().then(function (innerHTML) {
+            expect(innerHTML).to.equal('<blockquote><p>1</p><p>‘2’</p></blockquote>');
+          });
+        });
+      });
+
       when('inserting content with single quoted attributes', function () {
         beforeEach(function () {
           return driver.executeScript(function () {
