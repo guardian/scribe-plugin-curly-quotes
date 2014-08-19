@@ -20,3 +20,9 @@ require(['scribe', 'scribe-plugin-curly-quotes'], function (Scribe, scribePlugin
   scribe.use(scribePluginCurlyQuotes());
 });
 ```
+
+## Developing and testing
+
+Run `./setup.sh` to download dependencies
+
+Run `./run-tests.sh` to run the tests
