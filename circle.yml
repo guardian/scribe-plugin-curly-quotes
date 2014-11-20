@@ -1,3 +1,4 @@
 test:
-  pre:
+  override:
     - bower install
+    - ./run-tests.sh
