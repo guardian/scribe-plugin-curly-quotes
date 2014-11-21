@@ -1,0 +1,5 @@
+test:
+  pre:
+    - ./setup.sh
+  override:
+    - ./run-tests.sh
