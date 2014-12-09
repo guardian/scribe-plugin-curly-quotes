@@ -1,8 +1,6 @@
 define([
-  'scribe-common/src/element',
   'lodash-amd/modern/collections/toArray'
 ], function (
-  elementHelpers,
   toArray
 ) {
 
@@ -25,6 +23,8 @@ define([
        * FIXME: We wouldn't have to do this if the formatters were run on text
        * node mutations, but that's expensive unil we have a virtual DOM.
        */
+
+      var elementHelpers = scribe.element;
 
       var keys = {
         34: '"',
