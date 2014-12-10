@@ -1,10 +1,4 @@
-define([
-  'scribe-common/src/element',
-  'lodash-amd/modern/collections/toArray'
-], function (
-  elementHelpers,
-  toArray
-) {
+define([], function () {
 
   'use strict';
 
@@ -25,6 +19,9 @@ define([
        * FIXME: We wouldn't have to do this if the formatters were run on text
        * node mutations, but that's expensive unil we have a virtual DOM.
        */
+
+      var elementHelpers = scribe.element;
+      var Immutable = scribe.Immutable;
 
       var keys = {
         34: '"',
@@ -126,7 +123,7 @@ define([
       function mapElements(containerElement, func) {
         // TODO: This heuristic breaks for elements that contain a mixture of
         // inline and block elements.
-        var nestedBlockElements = toArray(containerElement.children).filter(elementHelpers.isBlockElement);
+        var nestedBlockElements = Immutable.List(containerElement.children).filter(elementHelpers.isBlockElement);
         if (nestedBlockElements.length) {
           nestedBlockElements.forEach(function (nestedBlockElement) {
             // Map the nested block elements

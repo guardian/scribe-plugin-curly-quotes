@@ -22,11 +22,7 @@ module.exports = function (pipelines) {
     glob('src/scribe-plugin-curly-quotes.js'),
     requireJS({
       // FIXME: auto?
-      preserveLicenseComments: false,
-      paths: {
-        'scribe-common': '../bower_components/scribe-common',
-        'lodash-amd': '../bower_components/lodash-amd',
-      }
+      preserveLicenseComments: false
     }),
     writeBoth
   ];
