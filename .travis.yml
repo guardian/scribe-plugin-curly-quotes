@@ -14,6 +14,10 @@ addons:
   sauce_connect: true
 
 env:
+  global:
+    - secure: ZeXQYQkUTSbJnYge4Hd8My9m/mTpB4gpNJLaRYr9IIlMXC3ODBbTGkqbh9SpF+cI8p1IYHaQCJxVu+eyzhwayn1KON2Dp5hcS3HOHTHcPX0WmTEofJ5pGAd9DI4xcbxcTLU5cSAYTuhsd1tehHhawyGLVJ/3odAgHieAbsU7JqM=
+    - secure: IxrAVc/QdvyHx/xAjQ5wIJQGsbtu6VoH/tVZRAWjh7HXebmafszeCtWlxZQ+ezJfTqZORxnFBlQe6JSQueoTkeaL+V5hWcWPfFs1peXzNlRu+1d+t9t3q+8wjvuxsWM770iqowj7lt2LFUaTuiH4QJYU/snnlPYpIoz+bpJaq5k=
+
   matrix:
     - BROWSER_NAME='firefox' BROWSER_VERSION='31' PLATFORM='Windows XP'
     - BROWSER_NAME='firefox' BROWSER_VERSION='32' PLATFORM='Windows XP'
@@ -24,10 +28,6 @@ env:
     - BROWSER_NAME='chrome' BROWSER_VERSION='37' PLATFORM='Windows XP'
     - BROWSER_NAME='chrome' BROWSER_VERSION='38' PLATFORM='Windows XP'
     - BROWSER_NAME='chrome' BROWSER_VERSION='38' PLATFORM='OS X 10.8'
-
-  global:
-    - secure: OaF1EHbUU+0vO3zdO70VlLVOuojRMnWhF02Lj3S7sP4+lbM3CY3JmEyB8G18G3x2aVyqgBEWLkh5WXahNuQIwnTYfidpbeJhvZD4xcP4zxgVyV6DLbxVN+lUpY2maOgCyDPGAix08HMWwuJss2Cw83bdmm0cJv/r2x6YXa/FpUA=
-    - secure: AdCl4LiKCMEOBAdltT/aAQVSmqnPZfCc/z2z7VPKCR/s1LbiD1i3ADJin5SgsglhWnmJToam5msNXEvL4gaT0dtlxtiw8ygutzQwEewPSLyekXuAF2NCt+63IdWWt6z470Cb6Nojrz0hRkiKzzeEjF2j1GFmrWkYzgYahlvi4sE=
 
 before_script:
   - npm install -g bower
