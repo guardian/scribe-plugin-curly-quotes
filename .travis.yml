@@ -5,17 +5,14 @@ node_js:
 
 sudo: false
 
-cache:
-  directories:
-    - node_modules
-    - bower_components
-
 addons:
-  sauce_connect:
-    username: scribe-ci
-    access_key: 4be9eeed-61de-4948-b18d-f7f655e9e4b0
+  sauce_connect: true
 
 env:
+  global:
+    - secure: ZeXQYQkUTSbJnYge4Hd8My9m/mTpB4gpNJLaRYr9IIlMXC3ODBbTGkqbh9SpF+cI8p1IYHaQCJxVu+eyzhwayn1KON2Dp5hcS3HOHTHcPX0WmTEofJ5pGAd9DI4xcbxcTLU5cSAYTuhsd1tehHhawyGLVJ/3odAgHieAbsU7JqM=
+    - secure: IxrAVc/QdvyHx/xAjQ5wIJQGsbtu6VoH/tVZRAWjh7HXebmafszeCtWlxZQ+ezJfTqZORxnFBlQe6JSQueoTkeaL+V5hWcWPfFs1peXzNlRu+1d+t9t3q+8wjvuxsWM770iqowj7lt2LFUaTuiH4QJYU/snnlPYpIoz+bpJaq5k=
+
   matrix:
     - BROWSER_NAME='firefox' BROWSER_VERSION='31' PLATFORM='Windows XP'
     - BROWSER_NAME='firefox' BROWSER_VERSION='32' PLATFORM='Windows XP'
