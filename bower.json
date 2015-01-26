@@ -6,6 +6,7 @@
   },
   "devDependencies": {
     "requirejs": "~2.1.9",
+    "immutable": "~3.6.2",
     "scribe": "guardian/scribe#master"
   }
 }
