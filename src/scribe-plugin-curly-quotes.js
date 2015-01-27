@@ -1,8 +1,6 @@
 define([
-  'scribe-common/src/element',
   'lodash-amd/modern/collections/toArray'
 ], function (
-  elementHelpers,
   toArray
 ) {
 
@@ -31,6 +29,8 @@ define([
         39: '\''
       };
       var curlyQuoteChar;
+
+      var elementHelpers = scribe.element;
 
       // `input` doesn't tell us what key was pressed, so we grab it beforehand
       scribe.el.addEventListener('keypress', function (event) {
