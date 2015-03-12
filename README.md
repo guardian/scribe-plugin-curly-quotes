@@ -1,5 +1,7 @@
 # scribe-plugin-curly-quotes [![Build Status](https://travis-ci.org/guardian/scribe-plugin-curly-quotes.svg?branch=master)](https://travis-ci.org/guardian/scribe-plugin-curly-quotes)
 
+Substitutes plain quotation marks with their semantic equivalents.
+
 ## Installation
 ```
 bower install scribe-plugin-curly-quotes
