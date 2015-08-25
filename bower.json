@@ -1,11 +1,11 @@
 {
   "name": "scribe-plugin-curly-quotes",
   "dependencies": {
-    "lodash-amd": "2.4.1"
+    "lodash-amd": "~3.5.0"
   },
   "devDependencies": {
     "requirejs": "~2.1.9",
-    "immutable": "~3.6.2",
-    "scribe": "guardian/scribe#master"
+    "immutable": "~3.7.4",
+    "scribe": "guardian/scribe#2.0.0"
   }
 }

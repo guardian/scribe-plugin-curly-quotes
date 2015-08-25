@@ -1,5 +1,5 @@
 define([
-  'lodash-amd/modern/collections/toArray'
+  'lodash-amd/modern/lang/toArray'
 ], function (
   toArray
 ) {

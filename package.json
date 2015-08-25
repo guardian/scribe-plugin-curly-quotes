@@ -3,7 +3,7 @@
   "version": "0.1.8",
   "main": "src/scribe-plugin-curly-quotes.js",
   "dependencies": {
-    "lodash-amd": "2.4.1"
+    "lodash-amd": "~3.5.0"
   },
   "devDependencies": {
     "chai": "~1.9.1",
