@@ -3,3 +3,7 @@ test:
     - ./setup.sh
   override:
     - ./run-tests.sh
+
+dependencies:
+  cache_dependencies:
+    - "vendor"

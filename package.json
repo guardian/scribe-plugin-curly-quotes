@@ -14,6 +14,7 @@
     "plumber-requirejs": "~0.4.0",
     "plumber-uglifyjs": "~0.4.0",
     "plumber-write": "~0.4.0",
+    "selenium-webdriver": "~2.47",
     "scribe-test-harness": "~0.0.25"
   },
   "scripts": {
