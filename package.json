@@ -3,7 +3,6 @@
   "version": "0.1.8",
   "main": "src/scribe-plugin-curly-quotes.js",
   "dependencies": {
-    "lodash-amd": "2.4.1"
   },
   "devDependencies": {
     "chai": "~1.9.1",
@@ -15,8 +14,8 @@
     "plumber-requirejs": "~0.4.0",
     "plumber-uglifyjs": "~0.4.0",
     "plumber-write": "~0.4.0",
-    "selenium-webdriver": "~2.41.0",
-    "scribe-test-harness": "~0.0.17"
+    "selenium-webdriver": "~2.47",
+    "scribe-test-harness": "~0.0.25"
   },
   "scripts": {
     "test": "./run-tests.sh"
