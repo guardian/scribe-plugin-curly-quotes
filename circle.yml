@@ -1,9 +1,9 @@
 test:
-  pre:
-    - ./setup.sh
   override:
     - ./run-tests.sh
 
 dependencies:
   cache_directories:
     - "vendor"
+  post:
+    - ./setup.sh
