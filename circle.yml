@@ -5,5 +5,5 @@ test:
     - ./run-tests.sh
 
 dependencies:
-  cache_dependencies:
+  cache_directories:
     - "vendor"
