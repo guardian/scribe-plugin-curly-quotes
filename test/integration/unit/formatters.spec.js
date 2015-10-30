@@ -22,5 +22,17 @@ describe('Formatters', function() {
 
       assert.equal(convertedText, testString);
     });
+
+    it('should convert single quotes', function() {
+      var output = formatters.convert("'1'");
+
+      assert.equal(output, "‘1’");
+    });
+
+    it('should convert double quotes', function() {
+      var output = formatters.convert('"1"');
+
+      assert.equal(output, '“1”');
+    });
   });
 });
