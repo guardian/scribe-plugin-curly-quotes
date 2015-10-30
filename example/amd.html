@@ -1,0 +1,74 @@
+<!--
+This example demonstrates how to consume the Scribe
+editor using RequireJS and the AMD module syntax.
+
+Note that you'll need to install scribe's dependencies through
+`bower install`. See http://bower.io/ if you are unfamiliar.
+-->
+<style>
+  button {
+    height: 3em;
+  }
+
+  .active {
+    border-style: inset;
+  }
+
+  .rte, .rte-toolbar {
+    display: block;
+  }
+
+  p {
+    margin-top: 0;
+  }
+
+  .rte {
+    border: 1px solid gray;
+    height: 300px;
+    overflow: auto;
+  }
+  .rte-output {
+    width: 100%;
+    height: 10em;
+  }
+</style>
+<script src="../bower_components/requirejs/require.js"></script>
+<script>
+require({
+  paths: {
+    'lodash-amd': '../bower_components/lodash-amd',
+    'immutable': '../bower_components/immutable/dist/immutable',
+    'scribe': '../bower_components/scribe/src'
+  }
+}, [
+  'scribe/scribe',
+  '../src/scribe-plugin-curly-quotes',
+
+
+], function (
+  Scribe,
+  smartListsPlugin
+) {
+  var scribe = new Scribe(document.querySelector('.rte'));
+  window.scribe = scribe;
+
+  scribe.setContent('<p>Hello, World!<\/p>');
+
+
+  scribe.use(smartListsPlugin());
+
+  scribe.on('content-changed', updateHtml);
+
+  function updateHtml() {
+    document.querySelector('.rte-output').value = scribe.getHTML();
+  }
+
+  updateHtml();
+});
+</script>
+
+<div class="rte"></div>
+<section>
+  <h1>Output</h1>
+  <textarea class="rte-output" readonly></textarea>
+</section>
