@@ -1,20 +1,16 @@
 define([
-  'lodash-amd/modern/collections/toArray'
+  'lodash-amd/modern/lang/toArray',
+  './constants',
+  './formatters'
 ], function (
-  toArray
+  toArray,
+  constants,
+  formatters
 ) {
 
   'use strict';
 
   return function () {
-
-    var openDoubleCurly = '“';
-    var closeDoubleCurly = '”';
-
-    var openSingleCurly = '‘';
-    var closeSingleCurly = '’';
-
-    var NON_BREAKING_SPACE = '\u00A0';
 
     return function (scribe) {
       /**
@@ -24,16 +20,17 @@ define([
        * node mutations, but that's expensive unil we have a virtual DOM.
        */
 
-      var keys = {
-        34: '"',
-        39: '\''
-      };
       var curlyQuoteChar;
 
-      var elementHelpers = scribe.element;
+      var elementHelpers = scribe.node;
 
       // `input` doesn't tell us what key was pressed, so we grab it beforehand
       scribe.el.addEventListener('keypress', function (event) {
+        var keys = {
+          34: '"',
+          39: '\''
+        };
+
         curlyQuoteChar = keys[event.charCode];
       });
 
@@ -56,10 +53,6 @@ define([
       // Substitute quotes on setting content or paste
       scribe.registerHTMLFormatter('normalize', substituteCurlyQuotes);
 
-      function isWordCharacter(character) {
-          return /[^\s()]/.test(character);
-      }
-
       function substituteCurlyQuotes(html) {
         // We don't want to replace quotes within the HTML markup
         // (e.g. attributes), only to text nodes
@@ -81,7 +74,7 @@ define([
               if (/^</.test(token)) {
                 return token;
               } else {
-                return convert(token);
+                return formatters.convert(token);
               }
             })
             .join('')
@@ -89,37 +82,6 @@ define([
         });
 
         return holder.innerHTML;
-      }
-
-      // Recursively convert the quotes to curly quotes. We have to do this
-      // recursively instead of with a global match because the latter would
-      // not detect overlaps, e.g. "'1'" (text can only be matched once).
-      function convert(str) {
-        if (! /['"]/.test(str)) {
-          return str;
-        } else {
-          var foo = str.
-            // Use [\s\S] instead of . to match any characters _including newlines_
-            replace(/([\s\S])?'/,
-                    replaceQuotesFromContext(openSingleCurly, closeSingleCurly)).
-            replace(/([\s\S])?"/,
-                    replaceQuotesFromContext(openDoubleCurly, closeDoubleCurly));
-          return convert(foo);
-        }
-      }
-
-      function replaceQuotesFromContext(openCurly, closeCurly) {
-        return function(m, prev) {
-          prev = prev || '';
-          var hasCharsBefore = isWordCharacter(prev);
-          // Optimistic heuristic, would need to look at DOM structure
-          // (esp block vs inline elements) for more robust inference
-          if (hasCharsBefore) {
-            return prev + closeCurly;
-          } else {
-            return prev + openCurly;
-          }
-        };
       }
 
       // Apply a function on all text nodes in a container, mutating in place
