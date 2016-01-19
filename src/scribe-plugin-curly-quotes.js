@@ -1,9 +1,7 @@
 define([
-  'lodash-amd/modern/lang/toArray',
   './constants',
   './formatters'
 ], function (
-  toArray,
   constants,
   formatters
 ) {
@@ -49,6 +47,19 @@ define([
           curlyQuoteChar = undefined;
         }
       });
+
+      function toArray(nodeList) {
+        var array = [];
+        if (nodeList && nodeList.length && nodeList.item) {
+          for (var i = 0; i < nodeList.length; i++) {
+            var item = nodeList.item(i);
+            if (item) {
+              array.push(item);
+            }
+          }
+        }
+        return array;
+      }
 
       // Substitute quotes on setting content or paste
       scribe.registerHTMLFormatter('normalize', substituteCurlyQuotes);
