@@ -10,6 +10,7 @@ mocha.timeout(15 * 1000);
 mocha.timeout(1200000);
 mocha.reporter('spec');
 mocha.addFile(__dirname + '/unit/formatters.spec.js');
+mocha.addFile(__dirname + '/unit/arrays.spec.js');
 mocha.addFile(__dirname + '/main.spec.js');
 
 createRunner(mocha);

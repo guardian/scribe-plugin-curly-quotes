@@ -1,9 +1,11 @@
 define([
   './constants',
-  './formatters'
+  './formatters',
+  './arrays'
 ], function (
   constants,
-  formatters
+  formatters,
+  arrays
 ) {
 
   'use strict';
@@ -48,19 +50,6 @@ define([
         }
       });
 
-      function toArray(nodeList) {
-        var array = [];
-        if (nodeList && nodeList.length && nodeList.item) {
-          for (var i = 0; i < nodeList.length; i++) {
-            var item = nodeList.item(i);
-            if (item) {
-              array.push(item);
-            }
-          }
-        }
-        return array;
-      }
-
       // Substitute quotes on setting content or paste
       scribe.registerHTMLFormatter('normalize', substituteCurlyQuotes);
 
@@ -99,7 +88,7 @@ define([
       function mapElements(containerElement, func) {
         // TODO: This heuristic breaks for elements that contain a mixture of
         // inline and block elements.
-        var nestedBlockElements = toArray(containerElement.children).filter(elementHelpers.isBlockElement);
+        var nestedBlockElements = arrays.toArray(containerElement.children).filter(elementHelpers.isBlockElement);
         if (nestedBlockElements.length) {
           nestedBlockElements.forEach(function (nestedBlockElement) {
             // Map the nested block elements
