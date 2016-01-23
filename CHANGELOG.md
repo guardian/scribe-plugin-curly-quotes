@@ -1,3 +1,8 @@
+# 1.0.1
+
+* The Lodash dependency has been replaced by a single module with the necessary functionality.
+
+Thanks [Erlend Hamnaberg](https://github.com/hamnis) for the contribution! 
 
 # 1.0.0
 
