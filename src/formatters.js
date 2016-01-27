@@ -1,7 +1,7 @@
 define(['./constants'], function (constants) {
 
   function isWordCharacter(character) {
-      return /[^\s()]/.test(character);
+      return /[^\s()]/.test(character) && character.charCodeAt(0) !== 8203;
   }
 
   function replaceQuotesFromContext(openCurly, closeCurly) {
